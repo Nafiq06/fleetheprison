@@ -1,9 +1,9 @@
 def start_game():
     print("\nWelcome to the prison!")
-    print("You are in a prison cell. You need to make a decision.")
+    print("You are in a prison you need to escape from there!. You need to make a decision.")
     
     while True:
-        print("\nWhat would you like to do?")
+        print("\nWhat would you like to do, you are in a prison cell?")
         print("1. Explore the prison.")
         print("2. Wait at the starting point.")
         print("3. Quit the game.")
@@ -16,7 +16,7 @@ def start_game():
             wait_for_others()
         elif choice == "3":
             print("\nThanks for playing! Goodbye!")
-            break
+            exit()
         else:
             print("Invalid choice. Please try again.")
 
@@ -49,7 +49,7 @@ def left_path():
         
         if choice == "1":
             print("\nYou found an exit from ventilation, and escaped from there")
-            game_over()
+            
         elif choice == "2":
             explore_prison()  # Return to the main prison exploration
         else:
@@ -66,8 +66,14 @@ def right_path():
         choice = input("Enter your choice (1/2): ")
         
         if choice == "1":
-            print("\nYou fight the guard and got his keycard and escaped the jail.")
+            ### ADD FIGHTING SYSTEM HERE! ###
+            
+            
+            print("\nYou fought the guard, and got his keycard.")
             game_won()
+            
+            ### ADD WHAT HAPPENS IF THE PLAYER FAILS TO SNEAK PAST THE GUARD
+            print("\nYou decide quitly, sneak past the guard and then escaped from the nearest exit from anyone seeing you")
         elif choice == "2":
             print("\nYou decide to hide from the guards from seeing you!!!")
             explore_prison()  # Go back to explore the prison again
@@ -75,7 +81,7 @@ def right_path():
             print("Invalid choice. Please try again.")
 
 def wait_for_others():
-    print("\nYou decide to wait at the starting point. Nothing happens for a while you decide to")
+    print("\nYou decide to wait at the starting point.")
     
     while True:
         print("\nWhat would you like to do next?")
@@ -93,7 +99,7 @@ def wait_for_others():
             print("Invalid choice. Please try again.")
 
 def game_over():
-    print("\nGame Over! You alerted the guards and they chased you and highered your sentence")
+    print("\nGame Over! You alerted the guards!!!")
     
     while True:
         print("\n1. Yes, try again.")
@@ -110,7 +116,7 @@ def game_over():
             print("Invalid choice. Please try again.")
 
 def game_won():
-    print("\nCongratulations! You've escaped the jail and found an exit!")
+    print("\nCongratulations! You've escaped the jail!")
     
     while True:
         print("\n1. Play again.")
