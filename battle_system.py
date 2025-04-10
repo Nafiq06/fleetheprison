@@ -5,16 +5,16 @@ def start_game():
     while True:
         print("\nWhat would you like to do, you are in a prison cell?")
         print("1. Explore the prison.")
-        print("2. Wait at the starting point.")
-        print("3. Quit the game.")
+        print("2. Quit the game.")
         
-        choice = input("Enter your choice (1/2/3): ")
+        
+        choice = input("Enter your choice (1/2): ")
 
         if choice == "1":
             explore_prison()
+        
+        
         elif choice == "2":
-            wait_for_others()
-        elif choice == "3":
             print("\nThanks for playing! Goodbye!")
             exit()
         else:
@@ -25,7 +25,7 @@ def explore_prison():
     
     while True:
         print("\nYou have two paths to choose from:")
-        print("1. Take the path to the left.")
+        print("1. Take the path to the left to cafereria.")
         print("2. Take the path to the right.")
         
         choice = input("Enter your choice (1/2): ")
@@ -38,12 +38,12 @@ def explore_prison():
             print("Invalid choice. Please try again.")
 
 def left_path():
-    print("\nYou walk down to the left path and find the cafeteria with crowded people.")
+    print("\nYou walk down to the left path and found the cafeteria with crowded people.")
     
     while True:
         print("\nWhat do you want to do?")
         print("1. hide amoungst your inmates.")
-        print("2. Turn back and go down the right path.")
+        print("2. Return back and go down the right path.")
         
         choice = input("Enter your choice (1/2): ")
         
@@ -71,18 +71,17 @@ def right_path():
             
             print("\nYou fought the guard, and got his keycard.")
             game_won()
-            
-            ### ADD WHAT HAPPENS IF THE PLAYER FAILS TO SNEAK PAST THE GUARD
-            print("\nYou decide quitly, sneak past the guard and then escaped from the nearest exit from anyone seeing you")
         elif choice == "2":
             print("\nYou decide to hide from the guards from seeing you!!!")
-            explore_prison()  # Go back to explore the prison again
+            wait_for_others()
+             # Go back to explore the prison again
+
         else:
             print("Invalid choice. Please try again.")
 
 def wait_for_others():
-    print("\nYou decide to wait at the starting point.")
-    
+    print("your hiding in a corner")
+    exit()
     while True:
         print("\nWhat would you like to do next?")
         print("1. Go back and explore the prison.")
@@ -94,7 +93,7 @@ def wait_for_others():
             start_game()  # Go back to start the game again
         elif choice == "2":
             print("\nThanks for playing! Goodbye!")
-            break
+            exit()
         else:
             print("Invalid choice. Please try again.")
 
@@ -111,7 +110,7 @@ def game_over():
             start_game()
         elif choice == "2":
             print("\nThanks for playing! Goodbye!")
-            break
+            exit()
         else:
             print("Invalid choice. Please try again.")
 
@@ -129,9 +128,10 @@ def game_won():
             start_game()
         elif choice == "2":
             print("\nThanks for playing! Goodbye!")
-            break
+            exit()
         else:
             print("Invalid choice. Please try again.")
 
 # Start the game
 start_game()
+ 

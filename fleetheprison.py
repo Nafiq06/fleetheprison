@@ -73,10 +73,9 @@ def right_path():
             game_won()
             
             ### ADD WHAT HAPPENS IF THE PLAYER FAILS TO SNEAK PAST THE GUARD
-            print("\nYou decide quitly, sneak past the guard and then escaped from the nearest exit from anyone seeing you")
         elif choice == "2":
             print("\nYou decide to hide from the guards from seeing you!!!")
-            explore_prison()  # Go back to explore the prison again
+              # Go back to explore the prison again
         else:
             print("Invalid choice. Please try again.")
 
