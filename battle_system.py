@@ -1,10 +1,11 @@
 import time
 import random
 
-# Inventory system
+# === Global State ===
 inventory = []
 
-def slow_print(text, delay=0.04):
+# === Utility Functions ===
+def slow_print(text, delay=0.035):
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
@@ -13,37 +14,49 @@ def slow_print(text, delay=0.04):
 def add_item(item):
     if item not in inventory:
         inventory.append(item)
-        slow_print(f"🧳 You picked up: {item}")
+        slow_print(f"You picked up: {item}")
 
 def has_item(item):
     return item in inventory
 
 def show_inventory():
-    slow_print("\n📦 Inventory:")
+    print("\nInventory:")
     if inventory:
         for item in inventory:
-            slow_print(f" - {item}")
+            print(f" - {item}")
     else:
-        slow_print("Your inventory is empty.")
+        print(" (empty)")
+
+# === Game Start ===
+def start_game():
+    inventory.clear()
+    slow_print("\nWelcome to PRISON BREAK: Shiv and Shadows\n")
+    exit()
+    choice = intro()
+    
+    if choice == "1":
+        brick_path()
+    elif choice == "2":
+        door_path()
+    else:
+        slow_print("Invalid choice. Restarting...")
+        start_game()
 
 # === Game Scenes ===
-
 def intro():
     slow_print("You wake up in a cold, dark prison cell.")
     slow_print("You have no memory of how you got here.")
     slow_print("A flickering light reveals a loose brick in the wall and a rusty door.")
-    slow_print("What do you want to do?")
-    slow_print("1. Inspect the loose brick")
-    slow_print("2. Try to open the door")
+    print("1. Inspect the loose brick")
+    print("2. Try to open the door")
     return input("Enter 1 or 2: ")
 
 def brick_path():
     slow_print("\nYou remove the brick and discover a narrow tunnel.")
     slow_print("Inside the hole, you find a small shiv.")
     add_item("shiv")
-    slow_print("Do you want to crawl through the tunnel?")
-    slow_print("1. Yes, crawl through the tunnel")
-    slow_print("2. No, go back and try the door")
+    print("1. Crawl through the tunnel")
+    print("2. Go back and try the door")
     choice = input("Enter 1 or 2: ")
     if choice == "1":
         tunnel_escape()
@@ -57,9 +70,8 @@ def door_path():
     slow_print("\nThe rusty door creaks open with a loud screech.")
     slow_print("You enter a hallway and see a guard asleep at his desk.")
     slow_print("There’s a key ring on his belt.")
-    slow_print("Do you try to steal the keys or sneak past him?")
-    slow_print("1. Steal the keys")
-    slow_print("2. Sneak past")
+    print("1. Steal the keys")
+    print("2. Sneak past")
     choice = input("Enter 1 or 2: ")
     if choice == "1":
         steal_keys()
@@ -73,9 +85,8 @@ def steal_keys():
     slow_print("\nYou slowly approach the guard...")
     if has_item("shiv"):
         slow_print("You grip your shiv tightly, just in case.")
-        slow_print("Do you want to use the shiv to threaten the guard or try to steal the keys quietly?")
-        slow_print("1. Threaten the guard")
-        slow_print("2. Steal the keys silently")
+        print("1. Threaten the guard")
+        print("2. Steal the keys silently")
         choice = input("Enter 1 or 2: ")
         if choice == "1":
             slow_print("You jab the shiv close to his neck. His eyes snap open.")
@@ -101,20 +112,70 @@ def silent_key_steal():
         add_item("prison key")
         escape_with_key(threatened=False)
     else:
-        slow_print("...and wakes up! He yells for help.")
-        slow_print("You’re tackled by two more guards within seconds.")
+        slow_print("...and wakes up! He's coming at you!")
+        fight_guard()
+
+def fight_guard():
+    player_hp = 20
+    guard_hp = 15
+    defending = False
+
+    slow_print("\nA guard wakes up and attacks!")
+
+    while player_hp > 0 and guard_hp > 0:
+        print(f"\nYour HP: {player_hp} | Guard HP: {guard_hp}")
+        print("1. Attack")
+        print("2. Defend")
+        print("3. Try to Run")
+        choice = input("→ ")
+
+        if choice == "1":
+            base_damage = random.randint(4, 7)
+            if has_item("shiv"):
+                base_damage += random.randint(3, 5)
+                slow_print("You slash with your shiv!")
+            else:
+                slow_print("You punch the guard!")
+            guard_hp -= base_damage
+            slow_print(f"You deal {base_damage} damage.")
+        elif choice == "2":
+            defending = True
+            slow_print("You brace for the guard’s attack.")
+        elif choice == "3":
+            if random.random() < 0.5:
+                slow_print("You slip away while the guard stumbles!")
+                return
+            else:
+                slow_print("You try to run but he grabs you!")
+        else:
+            slow_print("Invalid action.")
+
+        if guard_hp > 0:
+            guard_attack = random.randint(3, 6)
+            if defending:
+                guard_attack = max(1, guard_attack - random.randint(2, 4))
+                slow_print("You absorb some of the damage.")
+                defending = False
+            player_hp -= guard_attack
+            slow_print(f"The guard hits you for {guard_attack} damage.")
+
+    if player_hp <= 0:
+        slow_print("\nYou collapse. The guard calls for backup.")
         show_inventory()
-        slow_print("🚨 GAME OVER – You were caught.")
+        slow_print("GAME OVER – You died in combat.")
         end_game()
+    else:
+        slow_print("\nYou knock the guard out cold!")
+        add_item("prison key")
+        escape_with_key(threatened=False)
 
 def tunnel_escape():
     slow_print("\nYou squeeze through the tunnel. It's dark and damp.")
     slow_print("Halfway through, you hear whispering...")
     slow_print("Another prisoner is trapped in a side cell you pass.")
     slow_print("He begs: \"Please... help me get out too!\"")
-    slow_print("Do you help him?")
-    slow_print("1. Yes, help the prisoner")
-    slow_print("2. No, keep going")
+    print("1. Help the prisoner")
+    print("2. Keep going")
     choice = input("Enter 1 or 2: ")
     if choice == "1":
         if has_item("shiv"):
@@ -131,6 +192,16 @@ def tunnel_escape():
         slow_print("Invalid choice. Try again.")
         tunnel_escape()
 
+def sneak_past():
+    slow_print("\nYou tiptoe past the guard...")
+    time.sleep(2)
+    slow_print("CRASH! You bump into a mop bucket.")
+    slow_print("The guard wakes up and sounds the alarm.")
+    slow_print("You're surrounded. The escape attempt has failed.")
+    show_inventory()
+    slow_print("GAME OVER – Caught while sneaking.")
+    end_game()
+
 def escape_with_key(threatened=False):
     slow_print("You sneak down the hall to the main gate.")
     slow_print("You use the prison key to unlock the heavy door.")
@@ -141,57 +212,32 @@ def escape_with_key(threatened=False):
         silent_escape()
 
 # === Endings ===
-
 def heroic_escape():
     slow_print("You and the rescued prisoner crawl out behind the prison yard.")
     slow_print("You share a look – survivors.")
     show_inventory()
-    slow_print("🌟 HEROIC ENDING: You escaped and saved someone else. Not all heroes wear capes.")
+    slow_print("HEROIC ENDING: You escaped and saved someone else.")
     end_game()
 
 def silent_escape():
-    slow_print("You emerge quietly outside, behind the prison yard. No alarms. No violence.")
+    slow_print("You emerge quietly outside, behind the prison yard.")
     show_inventory()
-    slow_print("🌙 SILENT ENDING: You escaped without a trace. A ghost in the night.")
+    slow_print("SILENT ENDING: You escaped without a trace.")
     end_game()
 
 def bloody_escape():
     show_inventory()
-    slow_print("🩸 BLOODY ENDING: You escaped by threatening a guard. You're free… but at what cost?")
-    end_game()
-
-def sneak_past():
-    slow_print("\nYou tiptoe past the guard...")
-    time.sleep(2)
-    slow_print("CRASH! You bump into a mop bucket.")
-    slow_print("The guard wakes up and sounds the alarm.")
-    slow_print("You're surrounded. The escape attempt has failed.")
-    show_inventory()
-    slow_print("🚨 GAME OVER – Caught while sneaking.")
+    slow_print("BLOODY ENDING: You escaped by threatening or fighting a guard.")
     end_game()
 
 def end_game():
-    slow_print("\nWould you like to play again? (y/n)")
+    print("\nWould you like to play again? (y/n)")
     choice = input("→ ").lower()
     if choice == 'y':
-        inventory.clear()
         start_game()
     else:
-        slow_print("Thanks for playing! Stay sneaky.")
+        slow_print("Thanks for playing. Stay sharp.")
 
-# === Start Game ===
-
-def start_game():
-    choice = intro()
-    if choice == "1":
-        brick_path()
-    elif choice == "2":
-        door_path()
-    else:
-        slow_print("Invalid choice. Restart the game and choose 1 or 2.")
-        start_game()
-
-# Launch game
+# === Start the game ===
 start_game()
-
- 
+    
