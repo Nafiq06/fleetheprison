@@ -27,11 +27,39 @@ def show_inventory():
     else:
         print(" (empty)")
 
+# === Starting Menu ===
+def start_menu():
+    slow_print("\nWelcome to PRISON BREAK: Shiv and Shadows!")
+    print("1. Start New Game")
+    print("2. View Instructions")
+    print("3. Quit")
+    choice = input("Enter 1, 2, or 3: ")
+
+    if choice == "1":
+        start_game()
+    elif choice == "2":
+        show_instructions()
+    elif choice == "3":
+        slow_print("Thanks for playing! Stay sharp.")
+        exit()  # Quit the game
+    else:
+        slow_print("Invalid choice. Try again.")
+        start_menu()
+
+def show_instructions():
+    slow_print("\nInstructions:")
+    slow_print("You wake up in a cold, dark prison cell with no memory of how you got there.")
+    slow_print("Your goal is to escape the prison by making choices that lead to freedom.")
+    slow_print("You can pick up items, fight guards, or sneak past obstacles. But be careful: your choices matter!")
+    print("\nPress any key to return to the main menu...")
+    input()  # Wait for user to press any key to go back
+    start_menu()
+
 # === Game Start ===
 def start_game():
     inventory.clear()
     slow_print("\nWelcome to PRISON BREAK: Shiv and Shadows\n")
-    exit()
+    
     choice = intro()
     
     if choice == "1":
@@ -239,5 +267,5 @@ def end_game():
         slow_print("Thanks for playing. Stay sharp.")
 
 # === Start the game ===
-start_game()
+start_menu()
     
